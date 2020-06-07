@@ -1,0 +1,312 @@
+{
+	"info": {
+		"_postman_id": "cb03d1bf-7757-466b-8261-a8e506d35854",
+		"name": "NodeJS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Customer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ApiKey",
+								"type": "text",
+								"value": "{{apikey}}"
+							}
+						],
+						"url": {
+							"raw": "{{apiurl}}/customer",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CustomerById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ApiKey",
+								"type": "text",
+								"value": "{{apikey}}"
+							}
+						],
+						"url": {
+							"raw": "{{apiurl}}/customer/5edbe58e21f8831c14d221cd",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"customer",
+								"5edbe58e21f8831c14d221cd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ApiKey",
+								"value": "{{apikey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Alonso\",\n\t\"lastname\": \"Hernández\",\n\t\"email\": \"paul.803@gmail.com\",\n\t\"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/customer",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "ApiKey",
+								"type": "text",
+								"value": "{{apikey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Paul Adrian\",\n\t\"lastname\": \"Sevilla\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/customer/5edab7eec40218404c6ad0f7c",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"customer",
+								"5edab7eec40218404c6ad0f7c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "ApiKey",
+								"type": "text",
+								"value": "{{apikey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Paul Adrian\",\n\t\"lastname\": \"Sevilla\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/customer/5edb29351226cf34b8de0620",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"customer",
+								"5edb29351226cf34b8de0620"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ApiKey",
+								"type": "text",
+								"value": "{{apikey}}"
+							}
+						],
+						"url": {
+							"raw": "{{apiurl}}/user",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ApiKey",
+								"type": "text",
+								"value": "{{apikey}}"
+							}
+						],
+						"url": {
+							"raw": "{{apiurl}}/user/5edcfb60c136d3296010cd53",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"user",
+								"5edcfb60c136d3296010cd53"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ApiKey",
+								"type": "text",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJOb2RlQVBJIiwibmFtZSI6IlRlc3QgRG9lIiwiaWF0IjoxNTkxMzk4ODU5fQ.yz7vTl5x3AB23Fjn0Fq6gjveXXPB0BJZvChB7IkPhWY"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Paul\",\n\t\"lastName\": \"Sevilla\",\n\t\"username\": \"paul_sr\",\n\t\"email\": \"paul.803@gmail.com\",\n\t\"password\": \"123456\",\n\t\"role\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/user",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJOb2RlQVBJIiwibmFtZSI6IlRlc3QgRG9lIiwiaWF0IjoxNTkxMzk4ODU5fQ.yz7vTl5x3AB23Fjn0Fq6gjveXXPB0BJZvChB7IkPhWY"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Paul Adrian\",\n\t\"lastname\": \"Sevilla\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/user/5edb29351226cf34b8de0620",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"user",
+								"5edb29351226cf34b8de0620"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJOb2RlQVBJIiwibmFtZSI6IlRlc3QgRG9lIiwiaWF0IjoxNTkxMzk4ODU5fQ.yz7vTl5x3AB23Fjn0Fq6gjveXXPB0BJZvChB7IkPhWY"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Paul Adrian\",\n\t\"lastname\": \"Sevilla\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiurl}}/user/5edb29351226cf34b8de0620",
+							"host": [
+								"{{apiurl}}"
+							],
+							"path": [
+								"user",
+								"5edb29351226cf34b8de0620"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

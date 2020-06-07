@@ -1,0 +1,19 @@
+[{
+  "_id": {
+    "$oid": "5edd0b1374f9dba61fa925ab"
+  },
+  "name": "admin",
+  "permissions": {
+    "GET": {
+      "/user": true,
+      "/user/:id": true,
+      "/customer": true,
+      "/customer/:id": true
+    },
+    "POST": {
+      "/user": true,
+      "/customer": true
+    }
+  },
+  "status": true
+}]
