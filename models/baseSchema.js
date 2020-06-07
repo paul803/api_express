@@ -2,7 +2,7 @@
 // LOAD MONGOOSE MODULE
 var mongoose =  require('mongoose');
 var Schema = mongoose.Schema;
-var schemaName = 'Document'
+var schemaName = '_Document_'
 
 // CREATE SCHEME OBJECT AND ITS ATRIBUTES
 var ModelSchema = Schema({

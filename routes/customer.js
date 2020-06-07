@@ -1,11 +1,8 @@
 'use strict'
-// LOAD EXPRESS
-const express = require('express');
-// LOAD CONTROLLER
-const Controller = require('../controllers/customer');
-// ROUTER CALL
-const api = express.Router();
 
+const express = require('express');
+const Controller = require('../controllers/customer');
+const api = express.Router();
 const md_auth = require('../middlewares/auth');
 
 // ROUTE FOR CONTROLLER METHODS
