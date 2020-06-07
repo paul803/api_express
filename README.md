@@ -5,4 +5,5 @@ Small API using Express and Mongodb, just the first steps for practicing with No
 
 ## Fast instructions
 -In "index.js" edit Mongo connection, database name and port
+
 -Create "roles" schema, for permissions
