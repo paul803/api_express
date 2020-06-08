@@ -44,12 +44,11 @@ exports.routePermission = (req, res, next) => {
     var token = req.headers.apikey.replace(/['"]+/g, '')
     var payload = jwt.decode(token, secret);
     
-    ModelRoles.find({name: payload.role, status: true}) //, "permissions.GET": {'/user': true}
+    ModelRoles.findOne({name: payload.role, status: true}, 'permissions.'+req.method+'.'+baseUrl)
     .then((data) => {
-        if (data[0].permissions !== undefined) {
-            if (data[0].permissions[req.method][baseUrl] !== undefined) {
-                hasPermission = data[0].permissions[req.method][baseUrl];
-            }
+        if (data.permissions !== undefined) {
+            if (Object.keys(data.permissions).length > 0) 
+                hasPermission = true
         }
         if (hasPermission) next()
         else res.status(403).send({message: 'No access (db)'})
