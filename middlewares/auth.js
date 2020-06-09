@@ -10,20 +10,26 @@ const ModelUsers = require('../models/user');
 
 exports.makeAuth = (req, res, next) => {
     var username = req.body.username
-    var password = crypto.createHmac('sha256', req.body.password)
+    var password = req.body.password //crypto.createHmac('sha256', String(req.body.password))
+    console.log(password)
     ModelUsers.findOne({username: username, password: password, status: true})
     .then(data => {
         console.log(data)
         var payload = {
-            name: data.name 
+            iss: 'ApiExpress',
+            sub: data.name,
+            uid: data._id,
+            role: data.role,
+            iat: new Date().getTime()
+            //exp: expiration
         }
-        var token = jwt.encode(payload, secret);
+        res.token = jwt.encode(payload, secret);
+        next()
     })
     .catch(error => {
         console.log(error)
         res.status(403).send({message: 'No user found'})
     })
-    
 }
 
 exports.hasApiKey = (req, res, next) => {
