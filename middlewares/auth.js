@@ -11,7 +11,9 @@ const ModelUsers = require('../models/user');
 exports.makeAuth = (req, res, next) => {
     var username = req.body.username
     var password = req.body.password //crypto.createHmac('sha256', String(req.body.password))
-    console.log(password)
+    /*var password = crypto.createHash('sha256', ('123456')).digest('hex');
+    console.log(test)
+    console.log(password)*/
     ModelUsers.findOne({username: username, password: password, status: true})
     .then(data => {
         console.log(data)
