@@ -10,23 +10,23 @@ const ModelUsers = require('../models/user');
 
 exports.makeAuth = (req, res, next) => {
     var username = req.body.username
-    var password = req.body.password //crypto.createHmac('sha256', String(req.body.password))
-    /*var password = crypto.createHash('sha256', ('123456')).digest('hex');
-    console.log(test)
-    console.log(password)*/
+    var password = crypto.createHash('sha256').update(req.body.password).digest('hex');
+    
     ModelUsers.findOne({username: username, password: password, status: true})
     .then(data => {
-        console.log(data)
-        var payload = {
-            iss: 'ApiExpress',
-            sub: data.name,
-            uid: data._id,
-            role: data.role,
-            iat: new Date().getTime()
-            //exp: expiration
+        if (data !== null) {
+            var payload = {
+                iss: 'ApiExpress',
+                sub: data.name,
+                uid: data._id,
+                role: data.role,
+                iat: new Date().getTime()
+                //exp: expiration
+            }
+            res.token = jwt.encode(payload, secret);
+            next()
         }
-        res.token = jwt.encode(payload, secret);
-        next()
+        else res.status(403).send({message: 'Wrong user or password'})
     })
     .catch(error => {
         console.log(error)
