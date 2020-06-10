@@ -1,0 +1,57 @@
+[{
+  "_id": {
+    "$oid": "5ee05d2915b7e1a11f56758e"
+  },
+  "codProd": "SEM_FIJ_3",
+  "product": "SEMESTRAL FIJO",
+  "dues": 3,
+  "percentage": 30
+},{
+  "_id": {
+    "$oid": "5ee0619b7704ab18c46fa760"
+  },
+  "codProd": "AN_FIJ_12",
+  "product": "ANUAL FIJO",
+  "dues": 12,
+  "percentage": 60
+},{
+  "_id": {
+    "$oid": "5ee061d97704ab18c46fa761"
+  },
+  "codProd": "AN_COM_1",
+  "product": "ANUAL COMPUESTO",
+  "dues": 1,
+  "percentage": 80
+},{
+  "_id": {
+    "$oid": "5ee061f07704ab18c46fa762"
+  },
+  "codProd": "PROM_SEMFIJ",
+  "product": "PROMOTOR SEMETRAL FIJO",
+  "dues": 6,
+  "percentage": 2
+},{
+  "_id": {
+    "$oid": "5ee062267704ab18c46fa763"
+  },
+  "codProd": "PROM_ANFIJ",
+  "product": "PROMOTOR ANUAL FIJO",
+  "dues": 12,
+  "percentage": 2
+},{
+  "_id": {
+    "$oid": "5ee062397704ab18c46fa764"
+  },
+  "codProd": "PROM_SEMCOM",
+  "product": "PROMOTOR SEM COMPUESTO",
+  "dues": 6,
+  "percentage": 2
+},{
+  "_id": {
+    "$oid": "5ee0624c7704ab18c46fa765"
+  },
+  "codProd": "PROM_ANCOM",
+  "product": "PROMOTOR ANUAL COMPUESTO",
+  "dues": 12,
+  "percentage": 2
+}]

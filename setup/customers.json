@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "5ee05fe3dd9a2f3ab0a1e5bd"
+  },
+  "status": true,
+  "name": "Paul",
+  "lastName": "Sevilla Ramírez",
+  "contractType": "SEM_FIJ_3",
+  "payments": 3,
+  "amount": 1000,
+  "efficiency": "30%",
+  "email": "paul.803@gmail.com",
+  "phones": [
+    "3311541001",
+    "3316535341"
+  ],
+  "address": {
+    "street": "Chaputepec 915-5",
+    "zip": 45685,
+    "city": "El Salto"
+  },
+  "createdAt": {
+    "$date": "2020-06-10T04:21:55.978Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5ee062d0db636e2eb44684ed"
+  },
+  "status": true,
+  "name": "Eduardo",
+  "lastName": "Vargas",
+  "contractType": "AN_COM_1",
+  "payments": "1",
+  "amount": "2000",
+  "efficiency": "80%",
+  "email": "eduardo.vargas@gmail.com",
+  "createdAt": {
+    "$date": "2020-06-10T04:34:24.136Z"
+  },
+  "__v": 0
+}]

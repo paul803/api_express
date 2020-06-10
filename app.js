@@ -11,6 +11,7 @@ const app = express();
 const login_routes = require('./routes/login'); 
 const user_routes = require('./routes/user'); 
 const customer_routes = require('./routes/customer');
+const product_routes = require('./routes/product');
 
 //LOAD MIDDLEWARES
 const md_auth = require('./middlewares/auth');
@@ -25,6 +26,7 @@ app.use(md_auth.hasApiKey)
 app.use('/login', login_routes);
 app.use('/user', user_routes);
 app.use('/customer', customer_routes);
+app.use('/product', product_routes);
 
 // EXPORT MODULE APP
 module.exports = app;

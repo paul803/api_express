@@ -45,7 +45,7 @@ exports.insertRecord = (req, res) => {
 
     Model.create(req.body)
     .then(result => {
-        res.send(result)
+        res.send({'id': result._id})
     })
     .catch(error => {
         var message = '';
@@ -54,7 +54,7 @@ exports.insertRecord = (req, res) => {
         }
         else if (error.errors !== undefined) {
             var errors = Object.keys(error.errors)
-            console.log(errors)
+            //console.log(errors)
             errors.forEach(element => {
                 console.log(error.errors[element].properties.message)
                 message = ', '+error.errors[element].properties.message;
