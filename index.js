@@ -8,9 +8,9 @@ const mongoose = require('mongoose');
 const app = require('./app');
 //SERVER PORT
 const port = 3000;
-
 const databaseName = 'test'
-// Le indicamos a Mongoose que haremos la conexión con Promesas
+
+//MONGOOSE PROMISE CONNECTION
 mongoose.Promise = global.Promise;
 
 const mongoParams = {
@@ -19,16 +19,17 @@ const mongoParams = {
   useCreateIndex: true
 }
 
-//DATABASE CONNECTION
-mongoose.connect('mongodb://localhost:27017/'+databaseName, mongoParams)
-    .then(() => {
-        console.log("Database connected: '"+databaseName+"'")
-    
-        // CREAR EL SERVIDOR WEB CON NODEJS
-        app.listen(port, () => {
-            console.log("Server running, http://localhost:"+port);
-        });
-    })
-    .catch(err => console.log(err));
+//const uriDB = 'mongodb://localhost:27017/' + databaseName
+const uriDB = 'mongodb+srv://user_mongo:dx5gxWfLfJoc3IBX@cluster0-knpj2.gcp.mongodb.net/'+databaseName+'?retryWrites=true&w=majority'
 
-//const db = mongoose.connection;
+//DATABASE CONNECTION
+mongoose.connect(uriDB, mongoParams)
+.then(() => {
+    console.log("Database connected: '"+databaseName+"'")
+
+    // CREATE WEB SERVER
+    app.listen(port, () => {
+        console.log("Server running, http://localhost:"+port);
+    });
+})
+.catch(err => console.log(err));

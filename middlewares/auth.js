@@ -36,10 +36,11 @@ exports.makeAuth = (req, res, next) => {
 
 exports.hasApiKey = (req, res, next) => {
     if (!req.headers.apikey) {
-        if (req.baseUrl === '/login' || req.baseUrl === '/passwordReset') {
+        if (req.path === '/login' || req.path === '/login/passwordReset') {
+            req.user = {role: '_none_'}
             next()
         }
-        return res.status(403).send({message: 'No auth'})
+        else return res.status(403).send({message: 'No auth'})
     } 
     else {
         var token = req.headers.apikey.replace(/['"]+/g, '')
@@ -52,7 +53,7 @@ exports.hasApiKey = (req, res, next) => {
             }
         } catch (ex) {
             return res.status(404).send({
-                message: 'No valid'
+                message: 'ApiKey no valid'
             });
         }
         req.user = payload
@@ -60,28 +61,31 @@ exports.hasApiKey = (req, res, next) => {
     }
 }
 
-
 exports.routePermission = (req, res, next) => {
-    var hasPermission = false
-    var baseUrl = req.baseUrl
-    var paramsKeys = Object.keys(req.params)
-    if (paramsKeys.length > 0) {
-        baseUrl += '/:' + paramsKeys.join('/:')
+    var payload = req.user
+    if (payload.role === '_none_') {
+        next()
     }
-    var token = req.headers.apikey.replace(/['"]+/g, '')
-    var payload = jwt.decode(token, secret)
-    
-    ModelRoles.findOne({name: payload.role, status: true}, 'permissions.'+req.method+'.'+baseUrl)
-    .then((data) => {
-        if (data.permissions !== undefined) {
-            if (Object.keys(data.permissions).length > 0) 
-                hasPermission = true
+    else {
+        var path = req.path
+        var hasPermission = false
+        var paramsKeys = Object.keys(req.params)
+        if (paramsKeys.length > 0) {
+            path += '/:' + paramsKeys.join('/:')
         }
-        if (hasPermission) next()
-        else res.status(403).send({message: 'No access (db)'})
-    })
-    .catch(error => {
-        console.log(error)
-        res.status(403).send({message: 'No access (catch)'})
-    })
+        
+        ModelRoles.findOne({name: payload.role, status: true}, 'permissions.'+req.method+'.'+path)
+        .then((data) => {
+            if (data.permissions !== undefined) {
+                if (Object.keys(data.permissions).length > 0) 
+                    hasPermission = true
+            }
+            if (hasPermission) next()
+            else res.status(403).send({message: 'No access (db)'})
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(403).send({message: 'No access (catch)'})
+        })
+    }
 }
