@@ -8,7 +8,7 @@ const md_auth = require('../middlewares/auth');
 // ROUTE FOR CONTROLLER METHODS
 
 api.post('/', md_auth.makeAuth, (req, res) => {
-    res.send({token: res.token})
+    res.send({apiKey: res.token})
 });
 
 //api.put('/:id', md_auth.routePermission, Controller.updateRecord);

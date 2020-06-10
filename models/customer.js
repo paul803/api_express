@@ -6,13 +6,19 @@ var schemaName = 'Customer'
 
 // CREATE SCHEME OBJECT AND ITS ATRIBUTES
 var ModelSchema = Schema({
-    name: String,
-    lastName: String,
-    type: String,
-    email: {type: String, unique: true, required: '{PATH} is required!'},
-    password: {type: String, required: '{PATH} is required'},
+    name: {type: String, required: '{PATH} is required!'},
+    lastName: {type: String, required: '{PATH} is required!'},
+    contractType: String,
+    payments: String,
+    amount: String,
+    efficiency: String,
+    email: {type: String, unique: true},
+    phones: Object,
+    address: Object,
+    password: String,
     profileImage: String,
     status: {type: Boolean, default: true},
+    //contractDate: Date,
     createdAt: Date,
     updatedAt: Date
 });
