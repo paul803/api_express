@@ -1,13 +1,11 @@
 'use strict'
 
-
-//TODO: END THIS ROUTE FOR ROLES
 const express = require('express');
 const api = express.Router();
-const md_auth = require('../middlewares/auth');
-const Model = require('../models/product');
 
-api.get('/', md_auth.routePermission, (req, res) => {
+const Model = require('../models/role');
+
+api.get('/', (req, res) => {
     Model.find({}) //, '_id codProd product dues, percentage'
     .then(data => {
         res.send(data)

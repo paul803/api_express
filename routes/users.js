@@ -98,5 +98,42 @@ api.delete('/:id', (req, res) => {
     })
 });
 
+
+//UPLOAD THE PROFILE PICTURE
+api.post('/profile-image', async (req, res) => {
+    try {
+        if (!req.files) {
+            res.status(417).send({message: 'No file uploaded'});
+        } else {
+            let id_use = req.body.id
+            if (req.user.role === 'admin') {
+
+            }
+            let picture = req.files.picture;
+            //var name = new Date.now()
+            //console.log(name)
+            console.log(req)
+            var test = "asd" //req
+            res.send(test)
+            return false
+            //Use the mv() method to place the file in upload directory (i.e. "uploads")
+            avatar.mv('./uploads/' + name);
+
+            //send response
+            res.send({
+                status: true,
+                message: 'File is uploaded',
+                data: {
+                    name: avatar.name,
+                    mimetype: avatar.mimetype,
+                    size: avatar.size
+                }
+            });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
 module.exports = api;
 

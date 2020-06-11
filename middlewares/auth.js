@@ -1,37 +1,44 @@
 'user strict'
-const jwt = require('jwt-simple');
-const moment = require('moment');
-const crypto = require('crypto');
-const secret = 'this_is_sparta_666';
+require('dotenv').config()
+const jwt = require('jwt-simple')
+const moment = require('moment')
+const crypto = require('crypto')
+const secret = process.env.JWT_SECRET
 
 const ModelRoles = require('../models/role');
 const ModelUsers = require('../models/user');
 
 
 exports.makeAuth = (req, res, next) => {
-    var username = req.body.username
-    var password = crypto.createHash('sha256').update(req.body.password).digest('hex');
-    
-    ModelUsers.findOne({username: username, password: password, status: true})
-    .then(data => {
-        if (data !== null) {
-            var payload = {
-                iss: 'ApiExpress',
-                sub: data.name,
-                uid: data._id,
-                role: data.role,
-                iat: new Date().getTime()
-                //exp: expiration
+    if (req.body.username === undefined || req.body.password === undefined) {
+        res.status(403).send({message: 'Add username and password'})
+    }
+    else {
+        var username = req.body.username
+        var password = crypto.createHash('sha256').update(req.body.password).digest('hex');
+        
+        ModelUsers.findOne({username: username, password: password, status: true})
+        .then(data => {
+            console.log(data)
+            if (data !== null) {
+                var payload = {
+                    iss: 'ApiExpress',
+                    sub: data.name,
+                    uid: data._id,
+                    role: data.role,
+                    iat: new Date().getTime()
+                    //exp: expiration
+                }
+                res.token = jwt.encode(payload, secret);
+                next()
             }
-            res.token = jwt.encode(payload, secret);
-            next()
-        }
-        else res.status(403).send({message: 'Wrong user or password'})
-    })
-    .catch(error => {
-        console.log(error)
-        res.status(403).send({message: 'No user found'})
-    })
+            else res.status(403).send({message: 'Wrong user or password'})
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(403).send({message: 'No user found'})
+        })
+    }
 }
 
 exports.hasApiKey = (req, res, next) => {

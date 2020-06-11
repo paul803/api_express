@@ -3,12 +3,15 @@
 
 //MONGOOSE, FOR MONGODB
 const mongoose = require('mongoose');
+require('dotenv').config()
 //const path = require('path');
+
 // LOAD app.js WITH EXPRESS
 const app = require('./app');
 //SERVER PORT
-const port = 3000;
-const databaseName = 'test'
+const port = process.env.PORT
+const databaseName = process.env.DB_DATABASE
+const env = process.env.NODE_ENV
 
 //MONGOOSE PROMISE CONNECTION
 mongoose.Promise = global.Promise;
@@ -19,8 +22,11 @@ const mongoParams = {
   useCreateIndex: true
 }
 
-//const uriDB = 'mongodb://localhost:27017/' + databaseName
-const uriDB = 'mongodb+srv://user_mongo:dx5gxWfLfJoc3IBX@cluster0-knpj2.gcp.mongodb.net/'+databaseName+'?retryWrites=true&w=majority'
+let uriDB = 'mongodb://localhost:27017/' + databaseName
+if (env === 'dev') {
+  var user_pasw = process.env.DB_USERNAME + ':' + process.env.DB_PASSWORD
+  uriDB = process.env.DB_HOST1 + user_pasw + process.env.DB_HOST2 + databaseName + process.env.DB_HOST3
+}
 
 //DATABASE CONNECTION
 mongoose.connect(uriDB, mongoParams)
