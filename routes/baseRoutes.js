@@ -9,11 +9,11 @@ var api = express.Router();
 var md_auth = require('../middlewares/auth');
 
 // ROUTE FOR CONTROLLER METHODS
-api.get('/', md_auth.routePermission, Controller.getAll);
-api.get('/:id', md_auth.routePermission, Controller.getById);
-api.post('/', md_auth.routePermission, Controller.insertRecord);
-api.put('/:id', md_auth.routePermission, Controller.updateRecord);
-api.delete('/:id', md_auth.routePermission, Controller.deleteRecord);
+api.get('/', Controller.getAll);
+api.get('/:id', Controller.getById);
+api.post('/', Controller.insertRecord);
+api.put('/:id', Controller.updateRecord);
+api.delete('/:id', Controller.deleteRecord);
 
 // CONFIGURATION EXPORT
 module.exports = api;

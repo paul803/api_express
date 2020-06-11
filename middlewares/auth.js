@@ -70,12 +70,11 @@ exports.hasApiKey = (req, res, next) => {
 
 exports.routePermission = (req, res, next) => {
     var payload = req.user
-    
     if (payload.role === '_none_') {
         next()
     }
     else {
-        var path = req.path
+        var path = req.baseUrl
         var hasPermission = false
         var paramsKeys = Object.keys(req.params)
         if (paramsKeys.length > 0) {

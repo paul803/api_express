@@ -2,12 +2,15 @@
 
 const express = require('express');
 const fs = require('fs')
-const api = express.Router();
 const md_auth = require('../middlewares/auth');
 const Model = require('../models/user');
 
+const api = express.Router();
+
+api.use(md_auth.hasApiKey)
+
 //GET ALL RECORDS (PAGINATED)
-api.get('/', (req, res) => {
+api.get('/', md_auth.routePermission, (req, res) => {
     var page = req.query.page === undefined ? 0 : parseInt(req. query.page)
     var limit = req.query.limit == undefined? 10 : parseInt(req.query.limit)
     var search = req.query.search == undefined? '' : req.query.search
@@ -30,7 +33,7 @@ api.get('/', (req, res) => {
 });
 
 // GET A RECORD BY ITS ID
-api.get('/:id', (req, res) => {
+api.get('/:id', md_auth.routePermission, (req, res) => {
     var id = req.params.id;
     
     Model.findById(id, (err, data) => {
@@ -43,7 +46,7 @@ api.get('/:id', (req, res) => {
 });
 
 // INSERT A NEW RECORD
-api.post('/', (req, res) => {
+api.post('/', md_auth.routePermission, (req, res) => {
     req.body.status = true
     req.body.createdAt = Date.now()
 
@@ -71,7 +74,7 @@ api.post('/', (req, res) => {
 });
 
 // UPDATE A RECORD BY ID
-api.put('/:id', (req, res) => {
+api.put('/:id', md_auth.routePermission, (req, res) => {
     var id = req.params.id;
     req.body.updatedAt = Date.now();
     Model.findByIdAndUpdate(id, req.body)
@@ -86,7 +89,7 @@ api.put('/:id', (req, res) => {
 });
 
 // DELETE A RECORD BY ID
-api.delete('/:id', (req, res) => {
+api.delete('/:id', md_auth.routePermission, (req, res) => {
     var id = req.params.id;
     //Model.findOneAndRemove({field: 'newValue'}
     Model.findByIdAndDelete(id)
@@ -94,14 +97,13 @@ api.delete('/:id', (req, res) => {
         res.send(result)
     })
     .catch(error => {
-        res.status(409);
-        res.send(error)
+        res.status(409).send(error)
     })
 });
 
 
 //UPLOAD THE PROFILE PICTURE
-api.post('/profileImage', async (req, res) => {
+api.post('/profileImage', md_auth.routePermission, async (req, res) => {
     try {
         if (!req.files) {
             res.status(417).send({message: 'No file uploaded'});
@@ -129,8 +131,8 @@ api.post('/profileImage', async (req, res) => {
                 .then( _ => {
                     console.log('entra')
 
-                    Model.findById(id, (err, data) => {
-                        if (err) return res.status(500).send({message: 'Error on request'})
+                    Model.findById(id)
+                    .then(data => {
                         if (!data) return res.status(404).send({message: 'Not found data'})
     
                         if (data.image !== '' && data.image !== undefined) {
@@ -145,17 +147,27 @@ api.post('/profileImage', async (req, res) => {
                         data.image = fileName
                         data.updatedAt = Date.now()
                         data.save()
+                        .then(saved => {
+                            if (!saved) return res.status(404).send({message: 'Error on save image (x00)'})
+                            res.send(directory+fileName)
+                            //return true
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            fs.unlink(directory + fileName)
+                            res.status(409).send({message: 'Error on save image (x00)'})
+                        })
                     })
-                    .then()
-                    .catch()
+                    .catch(error => {
+                        console.log(error)
+                        fs.unlink(directory + fileName)
+                        res.status(409).send({message: 'Error on save image (x01)'})
+                    })
                 })
                 .catch(error => {
                     console.log(error)
-                    res.status(409).send({message: 'Error on save image'})
+                    res.status(409).send({message: 'Error on save image (x02)'})
                 })
-
-                res.send(directory+fileName)
-                return false
             }
         }
     } catch (err) {

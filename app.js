@@ -30,12 +30,6 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-//LOAD MIDDLEWARES
-const md_auth = require('./middlewares/auth');
-
-app.use(md_auth.hasApiKey)
-app.use(md_auth.routePermission);
-
 //LOAD ROUTES
 app.use('/login', login_route);
 app.use('/users', user_route);

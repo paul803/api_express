@@ -1,11 +1,14 @@
 'use strict'
 
 const express = require('express');
-const api = express.Router();
-
+const md_auth = require('../middlewares/auth');
 const Model = require('../models/permission');
 
-api.get('/', (req, res) => {
+const api = express.Router();
+
+api.use(md_auth.hasApiKey)
+
+api.get('/', md_auth.routePermission, (req, res) => {
     Model.find({})
     .then(data => {
         res.send(data)

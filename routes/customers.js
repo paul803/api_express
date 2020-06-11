@@ -1,12 +1,16 @@
 'use strict'
 
 const express = require('express');
+const fs = require('fs')
+const md_auth = require('../middlewares/auth');
 const Model = require('../models/customer');
 
 const api = express.Router();
 
+api.use(md_auth.hasApiKey)
+
 //GET ALL RECORDS (PAGINATED)
-api.get('/', (req, res) => {
+api.get('/', md_auth.routePermission, (req, res) => {
     var page = req.query.page === undefined ? 0 : parseInt(req. query.page)
     var limit = req.query.limit == undefined? 10 : parseInt(req.query.limit)
     var search = req.query.search == undefined? '' : req.query.search
@@ -29,11 +33,12 @@ api.get('/', (req, res) => {
 });
 
 // GET A RECORD BY ITS ID
-api.get('/:id', (req, res) => {
+api.get('/:id', md_auth.routePermission, (req, res) => {
+    
     var id = req.params.id;
     
     Model.findById(id, (err, data) => {
-        console.log(err)
+        //console.log(err)
         if (err) return res.status(500).send({message: 'Error on request'});
         if (!data) return res.status(404).send({message: 'Not found data'})
 
@@ -42,7 +47,7 @@ api.get('/:id', (req, res) => {
 });
 
 // INSERT A NEW RECORD
-api.post('/', (req, res) => {
+api.post('/', md_auth.routePermission, (req, res) => {
     req.body.createdAt = Date.now();
 
     Model.create(req.body)
@@ -69,7 +74,7 @@ api.post('/', (req, res) => {
 });
 
 // UPDATE A RECORD BY ID
-api.put('/:id', (req, res) => {
+api.put('/:id', md_auth.routePermission, (req, res) => {
     var id = req.params.id;
     req.body.updatedAt = Date.now();
     Model.findByIdAndUpdate(id, req.body)
@@ -84,7 +89,7 @@ api.put('/:id', (req, res) => {
 });
 
 // DELETE A RECORD BY ID
-api.delete('/:id', (req, res) => {
+api.delete('/:id', md_auth.routePermission, (req, res) => {
     var id = req.params.id;
     //Model.findOneAndRemove({field: 'newValue'}
     Model.findByIdAndDelete(id)
@@ -92,8 +97,7 @@ api.delete('/:id', (req, res) => {
         res.send(result)
     })
     .catch(error => {
-        res.status(409);
-        res.send(error)
+        res.status(409).send(error)
     })
 });
 
