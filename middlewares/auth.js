@@ -70,6 +70,7 @@ exports.hasApiKey = (req, res, next) => {
 
 exports.routePermission = (req, res, next) => {
     var payload = req.user
+    
     if (payload.role === '_none_') {
         next()
     }
@@ -83,16 +84,16 @@ exports.routePermission = (req, res, next) => {
         
         ModelRoles.findOne({name: payload.role, status: true}, 'permissions.'+req.method+'.'+path)
         .then((data) => {
-            if (data.permissions !== undefined) {
-                if (Object.keys(data.permissions).length > 0) 
-                    hasPermission = true
+            if (data.permissions[req.method] !== undefined) {
+                if (data.permissions[req.method][path] !== undefined)
+                    hasPermission = data.permissions[req.method][path]
             }
             if (hasPermission) next()
-            else res.status(403).send({message: 'No access (db)'})
+            else res.status(403).send({message: 'No access (x01db)'})
         })
         .catch(error => {
             console.log(error)
-            res.status(403).send({message: 'No access (catch)'})
+            res.status(403).send({message: 'No access (x01ca)'})
         })
     }
 }

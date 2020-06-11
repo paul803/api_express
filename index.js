@@ -4,14 +4,12 @@
 //MONGOOSE, FOR MONGODB
 const mongoose = require('mongoose');
 require('dotenv').config()
-//const path = require('path');
 
-// LOAD app.js WITH EXPRESS
 const app = require('./app');
-//SERVER PORT
+
+const env = process.env.NODE_ENV
 const port = process.env.PORT
 const databaseName = process.env.DB_DATABASE
-const env = process.env.NODE_ENV
 
 //MONGOOSE PROMISE CONNECTION
 mongoose.Promise = global.Promise;

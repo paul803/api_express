@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express');
+const fs = require('fs')
 const api = express.Router();
 const md_auth = require('../middlewares/auth');
 const Model = require('../models/user');
@@ -100,35 +101,62 @@ api.delete('/:id', (req, res) => {
 
 
 //UPLOAD THE PROFILE PICTURE
-api.post('/profile-image', async (req, res) => {
+api.post('/profileImage', async (req, res) => {
     try {
         if (!req.files) {
             res.status(417).send({message: 'No file uploaded'});
-        } else {
-            let id_use = req.body.id
-            if (req.user.role === 'admin') {
-
-            }
+        }
+        else if (!req.files.picture) {
+            res.status(417).send({message: 'No file picture'});
+        } 
+        else {
+            let id = req.body.id
             let picture = req.files.picture;
-            //var name = new Date.now()
-            //console.log(name)
-            console.log(req)
-            var test = "asd" //req
-            res.send(test)
-            return false
-            //Use the mv() method to place the file in upload directory (i.e. "uploads")
-            avatar.mv('./uploads/' + name);
 
-            //send response
-            res.send({
-                status: true,
-                message: 'File is uploaded',
-                data: {
-                    name: avatar.name,
-                    mimetype: avatar.mimetype,
-                    size: avatar.size
+            if (picture.mimetype !== 'image/png' && picture.mimetype !== 'image/jpg') {
+                res.status(417).send({message: 'Image format incorrect'});
+            }
+            else {
+                if (req.user.role === 'admin') {
+                    if (id === undefined || id === '') id = req.user.uid
                 }
-            });
+                
+                let directory = './public/users/'+id+'/';
+                let fileName = Date.now() + '.' + picture.mimetype.replace('image/', '')
+
+                //SAVE IMAGE
+                picture.mv(directory + fileName)
+                .then( _ => {
+                    console.log('entra')
+
+                    Model.findById(id, (err, data) => {
+                        if (err) return res.status(500).send({message: 'Error on request'})
+                        if (!data) return res.status(404).send({message: 'Not found data'})
+    
+                        if (data.image !== '' && data.image !== undefined) {
+                            let imageDelete = directory + data.image
+                            fs.unlink(imageDelete, (err) => {
+                                if (err) {
+                                    console.error(err)
+                                    return
+                                }
+                            })
+                        }
+                        data.image = fileName
+                        data.updatedAt = Date.now()
+                        data.save()
+                    })
+                    .then()
+                    .catch()
+                })
+                .catch(error => {
+                    console.log(error)
+                    res.status(409).send({message: 'Error on save image'})
+                })
+
+                res.send(directory+fileName)
+                return false
+            }
         }
     } catch (err) {
         res.status(500).send(err);

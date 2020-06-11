@@ -9,20 +9,21 @@ const bodyParser = require('body-parser');
 const morgan  = require('morgan');
 const _ = require('lodash');
 //ROUTES
-const login_routes = require('./routes/login'); 
-const user_routes = require('./routes/users'); 
-const customer_routes = require('./routes/customers');
-const product_routes = require('./routes/products');
-const role_routes = require('./routes/roles');
+const login_route = require('./routes/login'); 
+const user_route = require('./routes/users'); 
+const customer_route = require('./routes/customers');
+const product_route = require('./routes/products');
+const role_route = require('./routes/roles');
+const permission_route = require('./routes/permissions');
 
 const app = express();
 
-
-
-
 // enable files upload
 app.use(fileUpload({
-    createParentPath: true
+    createParentPath: true,
+    limits: { 
+        fileSize: 3 * 1024 * 1024 * 1024 //3MB max file(s) size
+    },
 }));
 app.use(cors());
 app.use(morgan('dev'));
@@ -36,11 +37,12 @@ app.use(md_auth.hasApiKey)
 app.use(md_auth.routePermission);
 
 //LOAD ROUTES
-app.use('/login', login_routes);
-app.use('/users', user_routes);
-app.use('/customers', customer_routes);
-app.use('/products', product_routes);
-app.use('/roles', role_routes);
+app.use('/login', login_route);
+app.use('/users', user_route);
+app.use('/customers', customer_route);
+app.use('/products', product_route);
+app.use('/roles', role_route);
+app.use('/permissions', permission_route);
 
 //EXPORT MODULE APP
 module.exports = app;
