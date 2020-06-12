@@ -74,12 +74,8 @@ exports.routePermission = (req, res, next) => {
         next()
     }
     else {
-        var path = req.baseUrl
+        var path = req.baseUrl + (req.route.path == '/' ? '' : req.route.path)
         var hasPermission = false
-        var paramsKeys = Object.keys(req.params)
-        if (paramsKeys.length > 0) {
-            path += '/:' + paramsKeys.join('/:')
-        }
         
         ModelRoles.findOne({name: payload.role, status: true}, 'permissions.'+req.method+'.'+path)
         .then((data) => {

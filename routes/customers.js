@@ -9,6 +9,22 @@ const api = express.Router();
 
 api.use(md_auth.hasApiKey)
 
+//MAKE THE DATABASE SEARCH
+async function getDataById(req, res, next) {
+    var id = req.params.id
+    
+    Model.findById(id)
+    .then(data => {
+        if (!data) return res.status(404).send({message: 'No found data'})
+        res.data = data
+        next()
+    })
+    .catch(error => {
+        console.log(error)
+        return res.status(404).send({message: 'Not found data'})
+    })
+}
+
 //GET ALL RECORDS (PAGINATED)
 api.get('/', md_auth.routePermission, (req, res) => {
     var page = req.query.page === undefined ? 0 : parseInt(req. query.page)
@@ -21,7 +37,7 @@ api.get('/', md_auth.routePermission, (req, res) => {
 
     Model.find(dataFind)
     .sort({createdAt: -1})
-    .skip(page) //page == 0 ? page : page + 1)
+    .skip(page)
     .limit(limit)
     .then(data => {
         res.send(data)
@@ -33,18 +49,7 @@ api.get('/', md_auth.routePermission, (req, res) => {
 });
 
 // GET A RECORD BY ITS ID
-api.get('/:id', md_auth.routePermission, (req, res) => {
-    
-    var id = req.params.id;
-    
-    Model.findById(id, (err, data) => {
-        //console.log(err)
-        if (err) return res.status(500).send({message: 'Error on request'});
-        if (!data) return res.status(404).send({message: 'Not found data'})
-
-        res.send(data)
-    });
-});
+api.get('/:id', md_auth.routePermission, getDataById, (req, res) => res.send(res.data))
 
 // INSERT A NEW RECORD
 api.post('/', md_auth.routePermission, (req, res) => {
@@ -69,7 +74,7 @@ api.post('/', md_auth.routePermission, (req, res) => {
             });
         }
         res.status(409)
-        res.send('Error on save'+message)
+        res.send('Error on save '+message)
     })
 });
 
@@ -100,6 +105,14 @@ api.delete('/:id', md_auth.routePermission, (req, res) => {
         res.status(409).send(error)
     })
 });
+
+
+//MAKE THE PAYMENT CALCULATION
+api.get('/calculator/:id', md_auth.routePermission, getDataById, (req, res) => {
+    data = res.data;
+    console.log('Make calculations')
+    res.send(data)
+})
 
 module.exports = api;
 

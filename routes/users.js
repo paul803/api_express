@@ -106,70 +106,66 @@ api.delete('/:id', md_auth.routePermission, (req, res) => {
 api.post('/profileImage', md_auth.routePermission, async (req, res) => {
     try {
         if (!req.files) {
-            res.status(417).send({message: 'No file uploaded'});
+            return res.status(417).send({message: 'No file uploaded'});
         }
-        else if (!req.files.picture) {
-            res.status(417).send({message: 'No file picture'});
+        if (!req.files.picture) {
+            return res.status(417).send({message: 'No file picture'});
         } 
-        else {
+        
             let id = req.body.id
             let picture = req.files.picture;
 
             if (picture.mimetype !== 'image/png' && picture.mimetype !== 'image/jpg') {
-                res.status(417).send({message: 'Image format incorrect'});
+                return res.status(417).send({message: 'Image format incorrect'});
             }
-            else {
-                if (req.user.role === 'admin') {
-                    if (id === undefined || id === '') id = req.user.uid
-                }
-                
-                let directory = './public/users/'+id+'/';
-                let fileName = Date.now() + '.' + picture.mimetype.replace('image/', '')
+            if (req.user.role === 'admin') {
+                if (id === undefined || id === '') id = req.user.uid
+            }
+            
+            let directory = './public/users/'+id+'/';
+            let fileName = Date.now() + '.' + picture.mimetype.replace('image/', '')
 
-                //SAVE IMAGE
-                picture.mv(directory + fileName)
-                .then( _ => {
-                    console.log('entra')
+            //SAVE IMAGE
+            picture.mv(directory + fileName)
+            .then( _ => {
 
-                    Model.findById(id)
-                    .then(data => {
-                        if (!data) return res.status(404).send({message: 'Not found data'})
-    
-                        if (data.image !== '' && data.image !== undefined) {
-                            let imageDelete = directory + data.image
-                            fs.unlink(imageDelete, (err) => {
-                                if (err) {
-                                    console.error(err)
-                                    return
-                                }
-                            })
-                        }
-                        data.image = fileName
-                        data.updatedAt = Date.now()
-                        data.save()
-                        .then(saved => {
-                            if (!saved) return res.status(404).send({message: 'Error on save image (x00)'})
-                            res.send(directory+fileName)
-                            //return true
+                Model.findById(id)
+                .then(data => {
+                    if (!data) return res.status(404).send({message: 'Not found data'})
+
+                    if (data.image !== '' && data.image !== undefined) {
+                        let imageDelete = directory + data.image
+                        fs.unlink(imageDelete, (err) => {
+                            if (err) {
+                                console.error(err)
+                                return
+                            }
                         })
-                        .catch(error => {
-                            console.log(error)
-                            fs.unlink(directory + fileName)
-                            res.status(409).send({message: 'Error on save image (x00)'})
-                        })
+                    }
+                    data.image = fileName
+                    data.updatedAt = Date.now()
+                    data.save()
+                    .then(saved => {
+                        if (!saved) return res.status(404).send({message: 'Error on save image (x00)'})
+                        res.send(directory+fileName)
+                        //return true
                     })
                     .catch(error => {
                         console.log(error)
                         fs.unlink(directory + fileName)
-                        res.status(409).send({message: 'Error on save image (x01)'})
+                        res.status(409).send({message: 'Error on save image (x00)'})
                     })
                 })
                 .catch(error => {
                     console.log(error)
-                    res.status(409).send({message: 'Error on save image (x02)'})
+                    fs.unlink(directory + fileName)
+                    res.status(409).send({message: 'Error on save image (x01)'})
                 })
-            }
-        }
+            })
+            .catch(error => {
+                console.log(error)
+                res.status(409).send({message: 'Error on save image (x02)'})
+            })
     } catch (err) {
         res.status(500).send(err);
     }
