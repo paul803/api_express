@@ -21,7 +21,7 @@
     "fs": "0.0.1-security",
     "jwt-simple": "^0.5.1",
     "lodash": "^4.17.15",
-    "moment": "^2.20.1",
+    "moment": "^2.29.4",
     "mongoose": "^5.0.1",
     "mongoose-pagination": "^1.0.0",
     "morgan": "^1.10.0"
